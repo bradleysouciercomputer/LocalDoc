@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <meta name="description" content="LocalDoc — a simple, private document editor that saves to your device.">
+  <title>LocalDoc — Documents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+  <script type="importmap">
+    {
+      "imports": {
+        "@material/web/": "https://esm.run/@material/web/"
+      }
+    }
+  </script>
+  <script type="module">
+    import '@material/web/all.js';
+    import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+    document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --md-sys-color-primary: #315da8;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #d9e2ff;
+      --md-sys-color-on-primary-container: #001a41;
+      --md-sys-color-secondary: #565e71;
+      --md-sys-color-secondary-container: #dbe2f9;
+      --md-sys-color-on-secondary-container: #131b2c;
+      --md-sys-color-surface: #f8f9ff;
+      --md-sys-color-surface-dim: #d8dae3;
+      --md-sys-color-surface-bright: #f8f9ff;
+      --md-sys-color-surface-container-lowest: #ffffff;
+      --md-sys-color-surface-container-low: #f2f3fa;
+      --md-sys-color-surface-container: #eceef5;
+      --md-sys-color-surface-container-high: #e6e8f0;
+      --md-sys-color-surface-container-highest: #e0e2ea;
+      --md-sys-color-on-surface: #191b22;
+      --md-sys-color-on-surface-variant: #444750;
+      --md-sys-color-outline: #747783;
+      --md-sys-color-outline-variant: #c4c6d0;
+      --md-sys-color-error: #ba1a1a;
+      --md-sys-color-error-container: #ffdad6;
+      --md-sys-color-on-error-container: #410002;
+      --md-sys-typescale-body-medium-font: Roboto, sans-serif;
+      --md-sys-typescale-body-large-font: Roboto, sans-serif;
+      --md-sys-typescale-title-medium-font: Roboto, sans-serif;
+      --md-sys-typescale-title-large-font: Roboto, sans-serif;
+      --md-sys-typescale-headline-medium-font: Roboto, sans-serif;
+      --md-sys-typescale-headline-small-font: Roboto, sans-serif;
+      font-family: Roboto, Arial, sans-serif;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --md-sys-color-primary: #b2c5ff;
+      --md-sys-color-on-primary: #002d6f;
+      --md-sys-color-primary-container: #17458f;
+      --md-sys-color-on-primary-container: #d9e2ff;
+      --md-sys-color-secondary: #bec6df;
+      --md-sys-color-secondary-container: #3e4659;
+      --md-sys-color-on-secondary-container: #e0e6ff;
+      --md-sys-color-surface: #111319;
+      --md-sys-color-surface-dim: #111319;
+      --md-sys-color-surface-bright: #373940;
+      --md-sys-color-surface-container-lowest: #0c0e13;
+      --md-sys-color-surface-container-low: #191b22;
+      --md-sys-color-surface-container: #1d2027;
+      --md-sys-color-surface-container-high: #282a32;
+      --md-sys-color-surface-container-highest: #33353d;
+      --md-sys-color-on-surface: #e2e2eb;
+      --md-sys-color-on-surface-variant: #c4c6d0;
+      --md-sys-color-outline: #8e909a;
+      --md-sys-color-outline-variant: #444750;
+      --md-sys-color-error: #ffb4ab;
+      --md-sys-color-error-container: #93000a;
+      --md-sys-color-on-error-container: #ffdad6;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+    button, input, textarea { font: inherit; }
+    .symbols { font-family: "Material Symbols Outlined"; font-weight: normal; font-style: normal; font-size: 22px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-flex; white-space: nowrap; direction: ltr; -webkit-font-feature-settings: "liga"; -webkit-font-smoothing: antialiased; font-feature-settings: "liga"; user-select: none; }
+    .app-header { position: sticky; z-index: 10; top: 0; min-height: 76px; display: flex; align-items: center; gap: 26px; padding: 12px 26px; background: var(--md-sys-color-surface); border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+    .brand { display: inline-flex; gap: 11px; align-items: center; color: inherit; text-decoration: none; min-width: 205px; font-size: 22px; font-weight: 500; letter-spacing: -.5px; }
+    .brand-mark { width: 36px; height: 40px; flex: 0 0 auto; }
+    .search-wrap { width: min(100%, 630px); max-width: 630px; }
+    #searchField { width: 100%; }
+    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    md-filled-button, md-filled-tonal-button, md-outlined-button, md-text-button { --md-filled-button-container-shape: 999px; --md-outlined-button-container-shape: 999px; --md-filled-tonal-button-container-shape: 999px; --md-text-button-container-shape: 999px; }
+    md-icon-button { --md-icon-button-icon-size: 22px; }
+    .shell { min-height: calc(100vh - 76px); display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+    .sidebar { padding: 24px 14px 18px 20px; display: flex; flex-direction: column; gap: 8px; background: var(--md-sys-color-surface); min-height: calc(100vh - 76px); }
+    .sidebar .new-side { margin: 0 4px 24px 0; align-self: flex-start; }
+    .nav-label { color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; padding: 8px 14px 10px; }
+    .nav-item { width: 100%; min-height: 44px; border: 0; border-radius: 999px; display: flex; align-items: center; gap: 15px; padding: 0 16px; text-align: left; color: var(--md-sys-color-on-surface-variant); background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; }
+    .nav-item:hover { background: var(--md-sys-color-surface-container-low); }
+    .nav-item.active { color: var(--md-sys-color-on-secondary-container); background: var(--md-sys-color-secondary-container); }
+    .nav-item .symbols { font-size: 20px; }
+    .sidebar-spacer { flex: 1; min-height: 24px; }
+    .privacy-note { margin: 12px 7px 0; border-top: 1px solid var(--md-sys-color-outline-variant); padding: 17px 5px 0; color: var(--md-sys-color-on-surface-variant); font-size: 12px; line-height: 1.5; }
+    .privacy-note .note-title { color: var(--md-sys-color-on-surface); font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
+    .main-content { min-width: 0; padding: 34px clamp(24px, 4vw, 58px) 60px; background: var(--md-sys-color-surface-container-low); }
+    .page-wrap { width: 100%; max-width: 1280px; margin: 0 auto; }
+    .page-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin: 6px 0 30px; }
+    .page-heading h1 { margin: 0 0 8px; font-size: clamp(27px, 3vw, 34px); line-height: 1.2; font-weight: 400; letter-spacing: -.7px; }
+    .page-heading p { margin: 0; color: var(--md-sys-color-on-surface-variant); font-size: 14px; line-height: 1.5; }
+    .section-title { margin: 28px 0 15px; font-size: 16px; font-weight: 600; }
+    .template-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .template-card { min-width: 0; padding: 14px; border: 1px solid var(--md-sys-color-outline-variant); border-radius: 14px; background: var(--md-sys-color-surface-container-lowest); transition: border-color .15s, transform .15s; }
+    .template-card:hover { border-color: var(--md-sys-color-primary); transform: translateY(-1px); }
+    .template-preview { height: 94px; padding: 17px 16px 12px; margin-bottom: 12px; border-radius: 8px; overflow: hidden; background: var(--md-sys-color-surface-container-low); color: var(--md-sys-color-on-surface-variant); }
+    .preview-line { height: 5px; border-radius: 8px; margin: 8px 0; background: var(--md-sys-color-outline-variant); opacity: .8; }
+    .preview-line.heading { height: 8px; width: 64%; background: var(--md-sys-color-primary); opacity: .65; margin: 0 0 12px; }
+    .preview-line.short { width: 55%; }
+    .preview-line.medium { width: 78%; }
+    .template-card h3 { margin: 0 0 5px; font-size: 14px; font-weight: 600; }
+    .template-card p { min-height: 34px; margin: 0 0 8px; color: var(--md-sys-color-on-surface-variant); font-size: 12px; line-height: 1.4; }
+    .template-card md-text-button { margin-left: -10px; }
+    .docs-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 34px; margin-bottom: 14px; }
+    .docs-heading h2 { margin: 0; font-size: 17px; font-weight: 600; }
+    .sort-note { color: var(--md-sys-color-on-surface-variant); font-size: 12px; }
+    .doc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .doc-card { background: var(--md-sys-color-surface-container-lowest); min-width: 0; overflow: hidden; border: 1px solid var(--md-sys-color-outline-variant); border-radius: 13px; transition: box-shadow .15s, border-color .15s; }
+    .doc-card:hover { border-color: var(--md-sys-color-outline); box-shadow: 0 2px 7px #0000000d; }
+    .doc-preview { min-height: 142px; max-height: 142px; overflow: hidden; padding: 22px 20px; border-bottom: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); cursor: pointer; }
+    .doc-preview h3 { margin: 0 0 13px; font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+    .doc-preview-text { font-size: 11px; line-height: 1.7; color: var(--md-sys-color-on-surface-variant); overflow-wrap: anywhere; }
+    .doc-card-footer { display: flex; align-items: center; gap: 7px; padding: 9px 11px 11px 15px; }
+    .doc-card-info { flex: 1; min-width: 0; }
+    .doc-card-title { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 4px; }
+    .doc-card-date { color: var(--md-sys-color-on-surface-variant); font-size: 11px; }
+    .doc-card-footer md-icon-button { flex: 0 0 auto; }
+    .empty-state { text-align: center; padding: 54px 20px; border: 1px dashed var(--md-sys-color-outline-variant); border-radius: 16px; background: var(--md-sys-color-surface-container-lowest); }
+    .empty-state .empty-icon { width: 64px; height: 64px; border-radius: 22px; margin: 0 auto 17px; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); display: grid; place-items: center; }
+    .empty-state .empty-icon .symbols { font-size: 31px; }
+    .empty-state h2 { margin: 0 0 8px; font-size: 20px; font-weight: 500; }
+    .empty-state p { max-width: 410px; margin: 0 auto 20px; color: var(--md-sys-color-on-surface-variant); font-size: 14px; line-height: 1.55; }
+    .editor-page { min-height: calc(100vh - 76px); background: var(--md-sys-color-surface-container-low); }
+    .editor-top { display: flex; align-items: center; gap: 13px; padding: 12px clamp(14px, 3vw, 32px); background: var(--md-sys-color-surface); border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+    .editor-title-wrap { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    #titleField { max-width: 510px; width: 100%; --md-outlined-text-field-container-shape: 8px; }
+    .save-status { display: flex; align-items: center; gap: 5px; min-height: 16px; color: var(--md-sys-color-on-surface-variant); font-size: 11px; padding-left: 3px; }
+    .save-status .symbols { font-size: 14px; }
+    .editor-actions { display: flex; align-items: center; gap: 3px; }
+    .editor-toolbar { position: sticky; top: 76px; z-index: 5; display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; padding: 9px 12px; border-bottom: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); }
+    .tool-separator { width: 1px; height: 26px; background: var(--md-sys-color-outline-variant); margin: 6px 5px; }
+    .format-select { width: 122px; }
+    .format-select select { width: 100%; padding: 8px 10px; border: 1px solid var(--md-sys-color-outline); border-radius: 7px; color: var(--md-sys-color-on-surface); background: var(--md-sys-color-surface); font: inherit; font-size: 13px; }
+    .editor-workspace { padding: 32px 18px 80px; }
+    .paper { width: min(816px, 100%); min-height: 1056px; margin: 0 auto; padding: 78px clamp(28px, 7vw, 88px) 90px; background: var(--md-sys-color-surface-container-lowest); color: var(--md-sys-color-on-surface); box-shadow: 0 1px 4px #1b1b1f13; border: 1px solid var(--md-sys-color-outline-variant); }
+    .document-editor { min-height: 850px; outline: none; font-size: 16px; line-height: 1.75; overflow-wrap: anywhere; }
+    .document-editor:empty::before { content: attr(data-placeholder); color: var(--md-sys-color-outline); pointer-events: none; }
+    .document-editor h1 { font-size: 2em; font-weight: 500; line-height: 1.25; margin: .6em 0 .45em; }
+    .document-editor h2 { font-size: 1.5em; font-weight: 500; line-height: 1.3; margin: .75em 0 .45em; }
+    .document-editor h3 { font-size: 1.2em; font-weight: 600; margin: .8em 0 .4em; }
+    .document-editor p { margin: .45em 0; }
+    .document-editor blockquote { margin: 1em 0; padding: 2px 0 2px 16px; border-left: 3px solid var(--md-sys-color-primary); color: var(--md-sys-color-on-surface-variant); }
+    .document-editor ul, .document-editor ol { padding-left: 28px; }
+    .document-editor a { color: var(--md-sys-color-primary); }
+    .document-editor table { border-collapse: collapse; width: 100%; }
+    .document-editor td, .document-editor th { border: 1px solid var(--md-sys-color-outline-variant); padding: 7px; }
+    .doc-footer-note { text-align: center; margin-top: 17px; color: var(--md-sys-color-on-surface-variant); font-size: 11px; }
+    .toast { position: fixed; z-index: 30; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; max-width: min(90vw, 520px); padding: 13px 18px; border-radius: 12px; background: var(--md-sys-color-on-surface); color: var(--md-sys-color-surface); box-shadow: 0 3px 15px #0002; font-size: 13px; transition: opacity .18s, transform .18s; }
+    .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+    .hidden { display: none !important; }
+    .mobile-menu { display: none; }
+    @media (max-width: 1120px) {
+      .template-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .doc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .brand { min-width: auto; }
+      .app-header { gap: 16px; }
+    }
+    @media (max-width: 760px) {
+      .app-header { min-height: 66px; padding: 10px 13px; gap: 9px; }
+      .brand { font-size: 19px; gap: 7px; }
+      .brand-mark { width: 30px; height: 34px; }
+      .header-search { display: none; }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { min-height: 0; padding: 8px 10px; flex-direction: row; align-items: center; gap: 4px; border-bottom: 1px solid var(--md-sys-color-outline-variant); overflow-x: auto; }
+      .sidebar .new-side, .nav-label, .sidebar-spacer, .privacy-note, .sidebar-utility { display: none; }
+      .nav-item { flex: 0 0 auto; width: auto; min-height: 40px; padding: 0 13px; gap: 7px; }
+      .main-content { padding: 23px 15px 42px; }
+      .page-heading { align-items: flex-start; margin-top: 3px; }
+      .page-heading h1 { font-size: 27px; }
+      .template-grid { gap: 9px; }
+      .template-card { padding: 10px; }
+      .template-preview { height: 75px; padding: 11px 10px; }
+      .doc-grid { grid-template-columns: 1fr; gap: 12px; }
+      .doc-preview { min-height: 115px; max-height: 115px; }
+      .editor-top { flex-wrap: wrap; gap: 8px; }
+      .editor-title-wrap { order: 1; flex: 1 1 calc(100% - 60px); }
+      .editor-top > [data-action="back"] { order: 0; }
+      .editor-actions { order: 2; margin-left: auto; }
+      .editor-toolbar { top: 66px; gap: 0; }
+      .editor-toolbar md-icon-button { --md-icon-button-icon-size: 19px; }
+      .format-select { width: 105px; }
+      .paper { min-height: 800px; padding: 46px 24px 70px; }
+      .document-editor { min-height: 650px; }
+      .editor-workspace { padding: 17px 9px 40px; }
+    }
+    @media (max-width: 410px) {
+      .template-grid { grid-template-columns: 1fr 1fr; }
+      .header-actions > #themeToggle { display: none; }
+      .header-actions md-filled-button { --md-filled-button-label-text-size: 12px; }
+      .template-card p { min-height: 48px; }
+    }
+    @media print {
+      body, .editor-page, .editor-workspace { background: white !important; }
+      .app-header, .sidebar, .editor-top, .editor-toolbar, .doc-footer-note, .toast { display: none !important; }
+      .shell { display: block; min-height: auto; }
+      .paper { width: auto; min-height: 0; border: 0; box-shadow: none; padding: 0; margin: 0; }
+      .document-editor { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header" id="appHeader">
+    <a class="brand" href="#home" aria-label="LocalDoc home">
+      <svg class="brand-mark" viewBox="0 0 42 48" aria-hidden="true">
+        <path d="M8 2h17l10 10v30a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z" fill="#4285f4"/>
+        <path d="M25 2v8a3 3 0 0 0 3 3h7" fill="#a1c2fa"/>
+        <path d="M12 21h14M12 27h18M12 33h18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M25 2v8a3 3 0 0 0 3 3h7" fill="none" stroke="#d2e3fc" stroke-width="1.5"/>
+      </svg>
+      <span>LocalDoc</span>
+    </a>
+    <div class="search-wrap header-search">
+      <md-outlined-text-field id="searchField" label="Search documents" type="search" supporting-text=" "></md-outlined-text-field>
+    </div>
+    <div class="header-actions">
+      <md-icon-button id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode"><span class="symbols">dark_mode</span></md-icon-button>
+      <md-filled-button id="newDocButton"><span class="symbols" slot="icon">add</span>New document</md-filled-button>
+    </div>
+  </header>
+
+  <div class="shell" id="homeShell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <md-filled-tonal-button class="new-side" id="sidebarNew"><span class="symbols" slot="icon">add</span>New document</md-filled-tonal-button>
+      <div class="nav-label">Workspace</div>
+      <button class="nav-item active" data-view="home"><span class="symbols">description</span>All documents</button>
+      <button class="nav-item" data-view="starred"><span class="symbols">star</span>Starred</button>
+      <button class="nav-item" data-view="trash"><span class="symbols">delete</span>Trash</button>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-utility">
+        <md-text-button id="exportBackup"><span class="symbols" slot="icon">download</span>Export backup</md-text-button>
+        <md-text-button id="importBackup"><span class="symbols" slot="icon">upload</span>Import backup</md-text-button>
+      </div>
+      <div class="privacy-note">
+        <div class="note-title"><span class="symbols">lock</span>Private by design</div>
+        Documents are saved in this browser on this device. They are not uploaded to a server.
+      </div>
+    </aside>
+
+    <main class="main-content" id="homePage">
+      <div class="page-wrap">
+        <div class="page-heading">
+          <div>
+            <h1 id="pageTitle">Your documents</h1>
+            <p id="pageSubtitle">A calm space for your ideas, plans, and writing.</p>
+          </div>
+          <md-filled-button id="headingNew"><span class="symbols" slot="icon">add</span>New document</md-filled-button>
+        </div>
+
+        <section id="templatesSection">
+          <h2 class="section-title">Start with a template</h2>
+          <div class="template-grid">
+            <article class="template-card">
+              <div class="template-preview"><div class="preview-line heading"></div><div class="preview-line medium"></div><div class="preview-line"></div><div class="preview-line short"></div></div>
+              <h3>Blank document</h3><p>A fresh page, ready for your thoughts.</p>
+              <md-text-button data-template="blank"><span class="symbols" slot="icon">add</span>Start writing</md-text-button>
+            </article>
+            <article class="template-card">
+              <div class="template-preview"><div class="preview-line heading"></div><div class="preview-line short"></div><div class="preview-line medium"></div><div class="preview-line medium"></div></div>
+              <h3>Meeting notes</h3><p>Capture decisions, actions, and follow-ups.</p>
+              <md-text-button data-template="meeting"><span class="symbols" slot="icon">event_note</span>Use template</md-text-button>
+            </article>
+            <article class="template-card">
+              <div class="template-preview"><div class="preview-line heading"></div><div class="preview-line medium"></div><div class="preview-line short"></div><div class="preview-line medium"></div></div>
+              <h3>Project plan</h3><p>Organize goals, milestones, and next steps.</p>
+              <md-text-button data-template="project"><span class="symbols" slot="icon">checklist</span>Use template</md-text-button>
+            </article>
+            <article class="template-card">
+              <div class="template-preview"><div class="preview-line heading"></div><div class="preview-line short"></div><div class="preview-line medium"></div><div class="preview-line short"></div></div>
+              <h3>Simple letter</h3><p>A clean starting point for a letter.</p>
+              <md-text-button data-template="letter"><span class="symbols" slot="icon">mail</span>Use template</md-text-button>
+            </article>
+          </div>
+        </section>
+
+        <div class="docs-heading">
+          <h2 id="docsHeading">Recent documents</h2>
+          <span class="sort-note" id="docsCount"></span>
+        </div>
+        <div class="doc-grid" id="docGrid"></div>
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-icon"><span class="symbols" id="emptyIcon">description</span></div>
+          <h2 id="emptyTitle">Your next idea starts here</h2>
+          <p id="emptyText">Create a document and it will be saved automatically on this device.</p>
+          <md-filled-button id="emptyNew"><span class="symbols" slot="icon">add</span>Create a document</md-filled-button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <main class="editor-page hidden" id="editorPage">
+    <div class="editor-top">
+      <md-icon-button data-action="back" aria-label="Back to documents" title="Back to documents"><span class="symbols">arrow_back</span></md-icon-button>
+      <div class="editor-title-wrap">
+        <md-outlined-text-field id="titleField" label="Document title" value="Untitled document" maxlength="180"></md-outlined-text-field>
+        <div class="save-status" id="saveStatus"><span class="symbols">cloud_done</span><span>Saved on this device</span></div>
+      </div>
+      <div class="editor-actions">
+        <md-icon-button id="starCurrent" aria-label="Star document" title="Star document"><span class="symbols">star</span></md-icon-button>
+        <md-icon-button data-action="copy-link" aria-label="Copy document link" title="Copy document link"><span class="symbols">link</span></md-icon-button>
+        <md-icon-button data-action="duplicate" aria-label="Make a copy" title="Make a copy"><span class="symbols">content_copy</span></md-icon-button>
+        <md-icon-button data-action="export-doc" aria-label="Export document" title="Export document"><span class="symbols">download</span></md-icon-button>
+        <md-icon-button data-action="print" aria-label="Print document" title="Print / save as PDF"><span class="symbols">print</span></md-icon-button>
+        <md-icon-button data-action="trash" aria-label="Move to trash" title="Move to trash"><span class="symbols">delete</span></md-icon-button>
+      </div>
+    </div>
+
+    <div class="editor-toolbar" role="toolbar" aria-label="Document formatting">
+      <label class="format-select">
+        <select id="blockFormat" aria-label="Text style">
+          <option value="p">Normal text</option>
+          <option value="h1">Title</option>
+          <option value="h2">Heading</option>
+          <option value="h3">Subheading</option>
+          <option value="blockquote">Quote</option>
+        </select>
+      </label>
+      <span class="tool-separator"></span>
+      <md-icon-button data-command="bold" aria-label="Bold" title="Bold (Ctrl+B)"><span class="symbols">format_bold</span></md-icon-button>
+      <md-icon-button data-command="italic" aria-label="Italic" title="Italic (Ctrl+I)"><span class="symbols">format_italic</span></md-icon-button>
+      <md-icon-button data-command="underline" aria-label="Underline" title="Underline (Ctrl+U)"><span class="symbols">format_underlined</span></md-icon-button>
+      <md-icon-button data-command="strikeThrough" aria-label="Strikethrough" title="Strikethrough"><span class="symbols">strikethrough_s</span></md-icon-button>
+      <span class="tool-separator"></span>
+      <md-icon-button data-command="insertUnorderedList" aria-label="Bulleted list" title="Bulleted list"><span class="symbols">format_list_bulleted</span></md-icon-button>
+      <md-icon-button data-command="insertOrderedList" aria-label="Numbered list" title="Numbered list"><span class="symbols">format_list_numbered</span></md-icon-button>
+      <md-icon-button data-command="justifyLeft" aria-label="Align left" title="Align left"><span class="symbols">format_align_left</span></md-icon-button>
+      <md-icon-button data-command="justifyCenter" aria-label="Align center" title="Align center"><span class="symbols">format_align_center</span></md-icon-button>
+      <md-icon-button data-action="link" aria-label="Insert link" title="Insert link"><span class="symbols">link</span></md-icon-button>
+      <span class="tool-separator"></span>
+      <md-icon-button data-command="removeFormat" aria-label="Clear formatting" title="Clear formatting"><span class="symbols">format_clear</span></md-icon-button>
+    </div>
+
+    <div class="editor-workspace">
+      <div class="paper">
+        <div id="documentEditor" class="document-editor" contenteditable="true" spellcheck="true" role="textbox" aria-label="Document body" aria-multiline="true" data-placeholder="Start writing…"></div>
+      </div>
+      <div class="doc-footer-note">Your changes save automatically to this browser.</div>
+    </div>
+  </main>
+
+  <input class="hidden" type="file" id="importFile" accept=".json,application/json">
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    const STORAGE_KEY = 'localdoc-documents-v1';
+    const THEME_KEY = 'localdoc-theme';
+    const root = document.documentElement;
+    const homeShell = document.getElementById('homeShell');
+    const homePage = document.getElementById('homePage');
+    const editorPage = document.getElementById('editorPage');
+    const documentEditor = document.getElementById('documentEditor');
+    const titleField = document.getElementById('titleField');
+    const saveStatus = document.getElementById('saveStatus');
+    const toastNode = document.getElementById('toast');
+    const searchField = document.getElementById('searchField');
+    const importFile = document.getElementById('importFile');
+    let docs = readDocs();
+    let currentId = null;
+    let currentView = 'home';
+    let toastTimer = null;
+    let saveTimer = null;
+
+    function uid() {
+      return (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'doc-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+    }
+    function readDocs() {
+      try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        return Array.isArray(data) ? data.filter(d => d && typeof d.id === 'string').map(d => ({
+          id: d.id, title: String(d.title || 'Untitled document'), content: String(d.content || ''),
+          createdAt: Number(d.createdAt) || Date.now(), updatedAt: Number(d.updatedAt) || Date.now(),
+          starred: Boolean(d.starred), trashedAt: Number(d.trashedAt) || null
+        })) : [];
+      } catch (error) { return []; }
+    }
+    function persist(showSaved = true) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(docs));
+        if (showSaved && currentId) setSaveStatus('Saved on this device', 'cloud_done');
+        return true;
+      } catch (error) {
+        if (currentId) setSaveStatus('Could not save — browser storage may be full', 'warning');
+        toast('Could not save. Check your browser storage settings.');
+        return false;
+      }
+    }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    }
+    function plainText(html) {
+      const node = document.createElement('div');
+      node.innerHTML = html || '';
+      return (node.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+    function niceDate(timestamp) {
+      const date = new Date(timestamp);
+      if (Number.isNaN(date.getTime())) return 'Recently edited';
+      const today = new Date();
+      const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
+      const sameDay = date.toDateString() === today.toDateString();
+      if (sameDay) return 'Edited today';
+      if (date.toDateString() === yesterday.toDateString()) return 'Edited yesterday';
+      return 'Edited ' + date.toLocaleDateString(undefined, {month:'short', day:'numeric', year: date.getFullYear() === today.getFullYear() ? undefined : 'numeric'});
+    }
+    function toast(message) {
+      toastNode.textContent = message;
+      toastNode.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastNode.classList.remove('visible'), 2800);
+    }
+    function setSaveStatus(message, icon) {
+      saveStatus.innerHTML = '<span class="symbols">' + escapeHtml(icon || 'cloud_done') + '</span><span>' + escapeHtml(message) + '</span>';
+    }
+    function getCurrentDoc() { return docs.find(doc => doc.id === currentId && !doc.trashedAt) || null; }
+    function createDoc(template = 'blank') {
+      const now = Date.now();
+      const templates = {
+        blank: {title:'Untitled document', content:''},
+        meeting: {title:'Meeting notes', content:'<h1>Meeting notes</h1><p><strong>Date:</strong> Add date</p><p><strong>Attendees:</strong> Add names</p><h2>Agenda</h2><ul><li>Topic one</li><li>Topic two</li></ul><h2>Discussion notes</h2><p>Capture the important points here.</p><h2>Decisions</h2><ul><li>Decision and owner</li></ul><h2>Action items</h2><ul><li>[ ] Action — owner — due date</li></ul>'},
+        project: {title:'Project plan', content:'<h1>Project plan</h1><p><strong>Project owner:</strong> Add name</p><p><strong>Target date:</strong> Add date</p><h2>Overview</h2><p>What are we aiming to accomplish?</p><h2>Goals and success measures</h2><ul><li>Goal one</li><li>Goal two</li></ul><h2>Milestones</h2><ol><li>Discovery</li><li>Build</li><li>Review and launch</li></ol><h2>Next steps</h2><ul><li>Task — owner — due date</li></ul>'},
+        letter: {title:'Untitled letter', content:'<p>[Your name]</p><p>[Date]</p><p>[Recipient name]</p><p>Dear [Recipient name],</p><p></p><p>Write your message here.</p><p></p><p>Sincerely,</p><p>[Your name]</p>'}
+      };
+      const chosen = templates[template] || templates.blank;
+      const doc = {id:uid(), title:chosen.title, content:chosen.content, createdAt:now, updatedAt:now, starred:false, trashedAt:null};
+      docs.unshift(doc);
+      persist(false);
+      location.hash = 'doc/' + doc.id;
+      renderRoute();
+      return doc;
+    }
+    function renderRoute() {
+      const route = (location.hash || '#home').slice(1);
+      if (route.startsWith('doc/')) {
+        const id = decodeURIComponent(route.slice(4));
+        const doc = docs.find(item => item.id === id && !item.trashedAt);
+        if (doc) { currentId = id; currentView = 'doc'; homeShell.classList.add('hidden'); editorPage.classList.remove('hidden'); homePage.classList.add('hidden'); renderEditor(doc); return; }
+        currentId = null;
+        location.hash = 'home';
+        return;
+      }
+      currentId = null;
+      editorPage.classList.add('hidden');
+      homeShell.classList.remove('hidden');
+      homePage.classList.remove('hidden');
+      currentView = ['home','starred','trash'].includes(route) ? route : 'home';
+      renderDashboard();
+    }
+    function renderEditor(doc) {
+      document.title = (doc.title || 'Untitled document') + ' — LocalDoc';
+      if (titleField.value !== doc.title) titleField.value = doc.title;
+      documentEditor.innerHTML = doc.content || '';
+      document.getElementById('starCurrent').innerHTML = '<span class="symbols">' + (doc.starred ? 'star' : 'star_outline') + '</span>';
+      document.getElementById('starCurrent').setAttribute('aria-label', doc.starred ? 'Remove star' : 'Star document');
+      document.getElementById('starCurrent').title = doc.starred ? 'Remove star' : 'Star document';
+      setSaveStatus('Saved on this device', 'cloud_done');
+    }
+    function renderDashboard() {
+      const titles = {home:['Your documents','A calm space for your ideas, plans, and writing.'],starred:['Starred documents','The documents you marked as important.'],trash:['Trash','Items in trash can be restored or permanently deleted.']};
+      document.getElementById('pageTitle').textContent = titles[currentView][0];
+      document.getElementById('pageSubtitle').textContent = titles[currentView][1];
+      document.getElementById('templatesSection').classList.toggle('hidden', currentView !== 'home');
+      document.getElementById('docsHeading').textContent = currentView === 'home' ? 'Recent documents' : currentView === 'starred' ? 'Starred documents' : 'Items in trash';
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === currentView));
+      const query = String(searchField.value || '').trim().toLowerCase();
+      let list = docs.filter(doc => currentView === 'trash' ? Boolean(doc.trashedAt) : !doc.trashedAt && (currentView !== 'starred' || doc.starred));
+      if (query) list = list.filter(doc => (doc.title + ' ' + plainText(doc.content)).toLowerCase().includes(query));
+      list.sort((a,b) => (currentView === 'trash' ? (b.trashedAt || 0) - (a.trashedAt || 0) : b.updatedAt - a.updatedAt));
+      document.getElementById('docsCount').textContent = list.length + (list.length === 1 ? ' document' : ' documents');
+      const grid = document.getElementById('docGrid');
+      const empty = document.getElementById('emptyState');
+      if (!list.length) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        document.getElementById('emptyIcon').textContent = currentView === 'trash' ? 'delete' : currentView === 'starred' ? 'star' : query ? 'search_off' : 'description';
+        document.getElementById('emptyTitle').textContent = query ? 'No matching documents' : currentView === 'trash' ? 'Trash is empty' : currentView === 'starred' ? 'No starred documents yet' : 'Your next idea starts here';
+        document.getElementById('emptyText').textContent = query ? 'Try another search term.' : currentView === 'trash' ? 'Documents you move to trash will appear here.' : currentView === 'starred' ? 'Star a document to keep it close at hand.' : 'Create a document and it will be saved automatically on this device.';
+        document.getElementById('emptyNew').classList.toggle('hidden', currentView !== 'home' || Boolean(query));
+        return;
+      }
+      empty.classList.add('hidden');
+      grid.innerHTML = list.map(doc => {
+        const text = plainText(doc.content);
+        const preview = text ? escapeHtml(text.slice(0, 190)) : 'No text yet. Open this document to start writing.';
+        const starButton = currentView === 'trash' ? '' : '<md-icon-button data-star="' + escapeHtml(doc.id) + '" aria-label="' + (doc.starred ? 'Remove star' : 'Star document') + '" title="' + (doc.starred ? 'Remove star' : 'Star document') + '"><span class="symbols">' + (doc.starred ? 'star' : 'star_outline') + '</span></md-icon-button>';
+        const trashActions = currentView === 'trash' ? '<md-icon-button data-restore="' + escapeHtml(doc.id) + '" aria-label="Restore document" title="Restore document"><span class="symbols">restore_from_trash</span></md-icon-button><md-icon-button data-delete-forever="' + escapeHtml(doc.id) + '" aria-label="Delete permanently" title="Delete permanently"><span class="symbols">delete_forever</span></md-icon-button>' : '';
+        return '<article class="doc-card"><div class="doc-preview" data-open="' + escapeHtml(doc.id) + '" tabindex="0" role="button" aria-label="Open ' + escapeHtml(doc.title) + '"><h3>' + escapeHtml(doc.title || 'Untitled document') + '</h3><div class="doc-preview-text">' + preview + '</div></div><div class="doc-card-footer"><div class="doc-card-info"><div class="doc-card-title">' + escapeHtml(doc.title || 'Untitled document') + '</div><div class="doc-card-date">' + escapeHtml(currentView === 'trash' ? 'Moved to trash ' + new Date(doc.trashedAt).toLocaleDateString() : niceDate(doc.updatedAt)) + '</div></div>' + starButton + trashActions + (currentView === 'trash' ? '' : '<md-icon-button data-open="' + escapeHtml(doc.id) + '" aria-label="Open document" title="Open document"><span class="symbols">chevron_right</span></md-icon-button>') + '</div></article>';
+      }).join('');
+    }
+    function scheduleSave() {
+      const doc = getCurrentDoc();
+      if (!doc) return;
+      doc.title = String(titleField.value || '').trim() || 'Untitled document';
+      doc.content = documentEditor.innerHTML;
+      doc.updatedAt = Date.now();
+      setSaveStatus('Unsaved changes', 'edit');
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => persist(true), 300);
+    }
+    function goBack() { location.hash = currentView === 'doc' ? '#home' : '#' + currentView; }
+    function exportDoc(doc) {
+      const title = doc.title || 'Untitled document';
+      const file = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>' + escapeHtml(title) + '</title><style>body{font:16px/1.75 Arial,sans-serif;max-width:800px;margin:50px auto;padding:0 28px;color:#202124}h1,h2,h3{line-height:1.25}blockquote{border-left:3px solid #315da8;padding-left:16px;color:#555}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:8px}a{color:#315da8}</style></head><body><h1>' + escapeHtml(title) + '</h1>' + (doc.content || '') + '</body></html>';
+      downloadFile(file, safeFilename(title) + '.html', 'text/html;charset=utf-8');
+      toast('Document exported as HTML.');
+    }
+    function safeFilename(name) { return String(name || 'document').replace(/[\\/:*?"<>|]+/g, '-').trim().slice(0, 100) || 'document'; }
+    function downloadFile(content, filename, type) {
+      const blob = new Blob([content], {type:type || 'application/octet-stream'});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); }
+      catch (error) {
+        const input = document.createElement('textarea'); input.value = text; input.style.position = 'fixed'; input.style.opacity = '0';
+        document.body.appendChild(input); input.select(); document.execCommand('copy'); input.remove();
+      }
+    }
+    function duplicateDoc(doc) {
+      const copy = {...doc, id:uid(), title:(doc.title || 'Untitled document') + ' (copy)', createdAt:Date.now(), updatedAt:Date.now(), trashedAt:null, starred:false};
+      docs.unshift(copy); persist(false); location.hash = 'doc/' + copy.id; renderRoute(); toast('Copy created.');
+    }
+    function toggleStar(id) {
+      const doc = docs.find(item => item.id === id && !item.trashedAt);
+      if (!doc) return;
+      doc.starred = !doc.starred; doc.updatedAt = Date.now(); persist(false);
+      if (currentId === id) renderEditor(doc);
+      else renderDashboard();
+      toast(doc.starred ? 'Added to starred.' : 'Removed from starred.');
+    }
+    function moveToTrash(id) {
+      const doc = docs.find(item => item.id === id && !item.trashedAt);
+      if (!doc) return;
+      doc.trashedAt = Date.now(); doc.updatedAt = Date.now(); persist(false);
+      toast('Moved to trash.');
+      location.hash = 'home'; renderRoute();
+    }
+    function insertLink() {
+      const url = prompt('Enter a web address (include https://):');
+      if (!url) return;
+      let parsed;
+      try { parsed = new URL(url); } catch (error) { toast('Please enter a valid web address.'); return; }
+      if (!['http:','https:','mailto:'].includes(parsed.protocol)) { toast('Only web links and email links are supported.'); return; }
+      documentEditor.focus();
+      document.execCommand('createLink', false, parsed.href);
+      scheduleSave();
+    }
+    document.getElementById('newDocButton').addEventListener('click', () => createDoc());
+    document.getElementById('sidebarNew').addEventListener('click', () => createDoc());
+    document.getElementById('headingNew').addEventListener('click', () => createDoc());
+    document.getElementById('emptyNew').addEventListener('click', () => createDoc());
+    document.querySelectorAll('[data-template]').forEach(button => button.addEventListener('click', () => createDoc(button.dataset.template)));
+    document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => { location.hash = button.dataset.view; }));
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const dark = root.dataset.theme !== 'dark';
+      root.dataset.theme = dark ? 'dark' : 'light';
+      localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+      document.getElementById('themeToggle').innerHTML = '<span class="symbols">' + (dark ? 'light_mode' : 'dark_mode') + '</span>';
+      document.getElementById('themeToggle').setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    });
+    try {
+      const theme = localStorage.getItem(THEME_KEY);
+      if (theme === 'dark') {
+        root.dataset.theme = 'dark';
+        document.getElementById('themeToggle').innerHTML = '<span class="symbols">light_mode</span>';
+        document.getElementById('themeToggle').setAttribute('aria-label', 'Switch to light mode');
+      }
+    } catch (error) {}
+    searchField.addEventListener('input', () => { if (!currentId) renderDashboard(); });
+    titleField.addEventListener('input', scheduleSave);
+    documentEditor.addEventListener('input', scheduleSave);
+    document.getElementById('starCurrent').addEventListener('click', () => { const doc = getCurrentDoc(); if (doc) toggleStar(doc.id); });
+    document.getElementById('blockFormat').addEventListener('change', event => {
+      documentEditor.focus();
+      document.execCommand('formatBlock', false, event.target.value);
+      scheduleSave();
+    });
+    document.querySelectorAll('[data-command]').forEach(button => {
+      button.addEventListener('pointerdown', event => event.preventDefault());
+      button.addEventListener('click', () => {
+        documentEditor.focus();
+        const command = button.dataset.command;
+        document.execCommand(command, false, null);
+        scheduleSave();
+      });
+    });
+    document.querySelectorAll('[data-action]').forEach(button => {
+      button.addEventListener('pointerdown', event => { if (button.dataset.action === 'link') event.preventDefault(); });
+      button.addEventListener('click', async () => {
+        const action = button.dataset.action;
+        const doc = getCurrentDoc();
+        if (action === 'back') { location.hash = '#home'; return; }
+        if (!doc) return;
+        if (action === 'copy-link') {
+          const link = location.origin + location.pathname + '#doc/' + encodeURIComponent(doc.id);
+          await copyText(link);
+          toast('Link copied. The document itself stays in this browser, so the link is not a public share.');
+        } else if (action === 'duplicate') duplicateDoc(doc);
+        else if (action === 'export-doc') exportDoc(doc);
+        else if (action === 'print') window.print();
+        else if (action === 'trash') moveToTrash(doc.id);
+        else if (action === 'link') insertLink();
+      });
+    });
+    document.addEventListener('click', event => {
+      const open = event.target.closest('[data-open]');
+      if (open) {
+        if (event.target.closest('[data-star], [data-restore], [data-delete-forever]')) return;
+        const doc = docs.find(item => item.id === open.dataset.open);
+        if (doc && !doc.trashedAt) location.hash = 'doc/' + doc.id;
+        return;
+      }
+      const star = event.target.closest('[data-star]');
+      if (star) { toggleStar(star.dataset.star); return; }
+      const restore = event.target.closest('[data-restore]');
+      if (restore) {
+        const doc = docs.find(item => item.id === restore.dataset.restore);
+        if (doc) { doc.trashedAt = null; doc.updatedAt = Date.now(); persist(false); renderDashboard(); toast('Document restored.'); }
+        return;
+      }
+      const forever = event.target.closest('[data-delete-forever]');
+      if (forever) {
+        const index = docs.findIndex(item => item.id === forever.dataset.deleteForever);
+        if (index >= 0 && confirm('Permanently delete this document? This cannot be undone.')) { docs.splice(index, 1); persist(false); renderDashboard(); toast('Document permanently deleted.'); }
+      }
+    });
+    document.getElementById('docGrid').addEventListener('keydown', event => {
+      if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('[data-open]')) { event.preventDefault(); const doc = docs.find(item => item.id === event.target.dataset.open); if (doc && !doc.trashedAt) location.hash = 'doc/' + doc.id; }
+    });
+    document.getElementById('exportBackup').addEventListener('click', () => {
+      downloadFile(JSON.stringify({format:'LocalDoc backup', version:1, exportedAt:new Date().toISOString(), documents:docs}, null, 2), 'localdoc-backup-' + new Date().toISOString().slice(0,10) + '.json', 'application/json;charset=utf-8');
+      toast('Backup downloaded.');
+    });
+    document.getElementById('importBackup').addEventListener('click', () => { importFile.value = ''; importFile.click(); });
+    importFile.addEventListener('change', async () => {
+      const file = importFile.files && importFile.files[0];
+      if (!file) return;
+      try {
+        const parsed = JSON.parse(await file.text());
+        const incoming = Array.isArray(parsed) ? parsed : parsed.documents;
+        if (!Array.isArray(incoming)) throw new Error('This file does not contain a LocalDoc document list.');
+        let count = 0;
+        incoming.forEach(item => {
+          if (!item || typeof item !== 'object') return;
+          const id = typeof item.id === 'string' ? item.id : uid();
+          const existing = docs.findIndex(doc => doc.id === id);
+          const imported = {id, title:String(item.title || 'Untitled document'), content:String(item.content || ''), createdAt:Number(item.createdAt) || Date.now(), updatedAt:Number(item.updatedAt) || Date.now(), starred:Boolean(item.starred), trashedAt:Number(item.trashedAt) || null};
+          if (existing >= 0) imported.id = uid();
+          docs.unshift(imported); count++;
+        });
+        persist(false); renderRoute(); toast('Imported ' + count + (count === 1 ? ' document.' : ' documents.'));
+      } catch (error) { toast('Import failed: choose a valid LocalDoc JSON backup.'); }
+    });
+    document.addEventListener('keydown', event => {
+      if (!currentId || editorPage.classList.contains('hidden')) return;
+      if ((event.ctrlKey || event.metaKey) && !event.altKey) {
+        const key = event.key.toLowerCase();
+        if (['b','i','u','s'].includes(key)) {
+          event.preventDefault();
+          if (key === 's') { clearTimeout(saveTimer); scheduleSave(); persist(true); }
+          else { documentEditor.focus(); document.execCommand(({b:'bold',i:'italic',u:'underline'})[key], false, null); scheduleSave(); }
+        }
+      }
+    });
+    window.addEventListener('hashchange', renderRoute);
+    window.addEventListener('beforeunload', () => { clearTimeout(saveTimer); const doc = getCurrentDoc(); if (doc) { doc.title = String(titleField.value || '').trim() || 'Untitled document'; doc.content = documentEditor.innerHTML; doc.updatedAt = Date.now(); } persist(false); });
+    if (!location.hash) location.hash = 'home';
+    renderRoute();
+  </script>
+</body>
+</html>
